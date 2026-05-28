@@ -1,187 +1,177 @@
-# 🏥💻 MediHana-Sistema
+# 🏥💻 MediHana-Frontend
 
-> Sistema de gestión de citas y consultorios para clínica MediHana. Automatiza registros, asignación y reportes, resolviendo problemas de gestión manual.
+> Sistema web de gestión clínica desarrollado con **React JSX + Vite**, orientado a la administración de pacientes, médicos, citas, consultorios, pagos, facturas e informes.
 
-![Java](https://img.shields.io/badge/Java-17-00739F?logo=java)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-00758F?logo=mysql)
-![Maven](https://img.shields.io/badge/Maven-C71A36?logo=apache-maven)
+![React](https://img.shields.io/badge/React-JSX-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?logo=vite)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?logo=javascript)
+![CSS](https://img.shields.io/badge/CSS-3-1572B6?logo=css3)
+![React Router](https://img.shields.io/badge/React_Router-DOM-CA4245?logo=react-router)
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git)
+![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github)
 
 ---
 
 ## 📌 Sobre el proyecto
 
-**MediHana-Sistema** es una solución de software diseñada para una clínica privada de atención ambulatoria que ofrece servicios de medicina general, pediatría, cardiología, oncología y otras especialidades.
+**MediHana-Frontend** es una aplicación web para la gestión visual de una clínica médica.
+Permite organizar información relacionada con pacientes, médicos, especialidades, consultorios, citas, historial médico, facturas, pagos e informes.
 
-Actualmente, la gestión de citas se realiza de forma manual o con hojas de cálculo dispersas, lo que genera errores, duplicidad de reservas y falta de control en tiempo real. Este sistema busca **automatizar el proceso completo** de registro de pacientes, asignación de citas, control de disponibilidad de médicos y consultorios, y generación de reportes básicos.
-
-### 🎯 Problema a resolver
-- Registro manual propenso a errores y duplicidad.
-- Desconocimiento de la disponibilidad real de médicos y consultorios.
-- Pérdida o desorden en el historial clínico de citas.
-- Falta de control administrativo sobre cancelaciones y ausencias.
-- Ausencia de reportes claros sobre el estado de las citas.
-
-### ✨ Solución propuesta
-El sistema permitirá:
-- Registrar y gestionar pacientes, médicos y consultorios.
-- Programar, cancelar y reprogramar citas con validación de disponibilidad.
-- Consultar historiales de citas por paciente.
-- Generar reportes de citas (programadas, atendidas, canceladas) por especialidad.
-- Persistir toda la información en una base de datos segura en la nube.
+El sistema cuenta con una interfaz moderna, limpia y responsive, desarrollada con componentes reutilizables en React.
 
 ---
 
-## 🏗️ Arquitectura y Paradigma
+## ✨ Funcionalidades principales
 
-### Patrón de Diseño: POO (Programación Orientada a Objetos)
-El sistema se fundamenta en **POO** para modelar el dominio de la clínica mediante entidades claras y relaciones de herencia. La jerarquía principal se basa en la clase abstracta `Persona`, que se especializa en `Paciente`, `Médico` y `Administrador`.
+* Panel principal administrativo.
+* Gestión de pacientes.
+* Gestión de médicos.
+* Gestión de especialidades.
+* Gestión de consultorios.
+* Gestión de citas médicas.
+* Historial médico.
+* Facturas y pagos.
+* Informes.
+* Buscador dinámico para pacientes y médicos.
+* Navegación mediante sidebar.
+* Tablas con acciones de editar y eliminar.
+* Diseño moderno con CSS personalizado.
 
-Esto permite:
-- **Herencia:** Reducción de código repetitivo (DNI, nombre, teléfono) mediante la clase base `Persona`.
-- **Encapsulación:** Protección de datos sensibles como `historial_medico`, `diagnósticos` y datos de pago (`Factura`, `Pago`).
-- **Abstracción:** Separación de la lógica de negocio (`SistemaClinica`) de la implementación de datos.
-- **Asociaciones:** Relaciones definidas entre `Cita`, `Paciente`, `Médico`, `Consultorio` y `Especialidad`.
+---
 
-**Jerarquía de Clases Principal:**
-- `Persona` (Base)
-  - `Paciente` (+ `historial_citas`, `historial_medico`)
-  - `Medico` (+ `horario_disponible`, `especialidades`)
-  - `Administrador` (+ `rol`)
-- `Especialidad`, `Consultorio`, `Cita`, `HistorialMedico`, `Factura`, `Pago`
-
-### Arquitectura: MVC (Modelo-Vista-Controlador)
-Se adopta el patrón **MVC** para separar las responsabilidades, asegurando que la lógica de negocio (validación de citas, cálculo de pagos) no se mezcle con la interfaz o la base de datos.
-
-- **Modelo:** Representa las entidades (`Paciente`, `Cita`, `Factura`) y la lógica de acceso a datos (`DAO`).
-- **Vista:** Interfaz de usuario (Consola o GUI) para la gestión de citas y reportes.
-- **Controlador:** Orquesta el flujo, gestionando la creación de `Citas`, la asignación de `Consultorios` y el procesamiento de `Pagos`.
-
-### Estructura del Proyecto (Tree)
+## 🏗️ Estructura del proyecto
 
 ```txt
-src/
-├── main/
-│   ├── java/
-│   │   └── com/medihana/
-│   │       ├── model/                 # Entidades del dominio
-│   │       │   ├── Persona.java       # Clase base (id, dni, nombre, telefono, correo)
-│   │       │   ├── Paciente.java      # Hereda de Persona + historial_citas, historial_medico
-│   │       │   ├── Medico.java        # Hereda de Persona + horario, especialidades
-│   │       │   ├── Administrador.java # Hereda de Persona + rol
-│   │       │   ├── Especialidad.java  # id, nombre, descripcion
-│   │       │   ├── Consultorio.java   # numero, piso, estado, especialidad_asignada
-│   │       │   ├── Cita.java          # Relación: Paciente, Medico, Consultorio, Especialidad
-│   │       │   ├── HistorialMedico.java # Diagnostico, tratamiento, observaciones
-│   │       │   ├── Factura.java       # Relación: Cita, monto, estado_pago
-│   │       │   └── Pago.java          # Relación: Factura, metodo, fecha
-│   │       │
-│   │       ├── dao/                   # Acceso a Datos (JDBC)
-│   │       │   ├── PersonaDAO.java
-│   │       │   ├── CitaDAO.java
-│   │       │   └── PagoDAO.java
-│   │       │
-│   │       ├── service/               # Lógica de Negocio
-│   │       │   ├── CitasService.java  # Validar disponibilidad, programar, cancelar
-│   │       │   ├── ReportesService.java
-│   │       │   └── FacturacionService.java
-│   │       │
-│   │       ├── controller/            # Controladores (Interfaz)
-│   │       │   ├── MenuController.java
-│   │       │   └── CitasController.java
-│   │       │
-│   │       ├── util/
-│   │       │   ├── DatabaseConnection.java
-│   │       │   └── Validator.java
-│   │       │
-│   │       └── Main.java              # Punto de entrada (SistemaClinica)
+frontend_medihana/
+├── node_modules/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── Card.jsx
+│   │   ├── Layout.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── Table.jsx
 │   │
-│   └── resources/
-│       └── config.properties          # Credenciales de BD
+│   ├── context/
+│   │   └── AuthContext.jsx
+│   │
+│   ├── data/
+│   │   └── mockData.js
+│   │
+│   ├── pages/
+│   │   ├── Citas.jsx
+│   │   ├── Consultorios.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── Especialidades.jsx
+│   │   ├── Facturas.jsx
+│   │   ├── Historial.jsx
+│   │   ├── Login.jsx
+│   │   ├── Medicos.jsx
+│   │   ├── Pacientes.jsx
+│   │   ├── Pagos.jsx
+│   │   └── Reportes.jsx
+│   │
+│   ├── routes/
+│   │   └── AppRoutes.jsx
+│   │
+│   ├── styles/
+│   │   ├── dashboard.css
+│   │   ├── global.css
+│   │   ├── layout.css
+│   │   └── tables.css
+│   │
+│   ├── App.jsx
+│   └── main.jsx
 │
-└── test/
-    └── java/                          # Pruebas unitarias de entidades y servicios
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+└── vite.config.js
 ```
---- 
+
+---
+
 ## 🛠️ Tecnologías utilizadas
 
-| Tecnología | Propósito |
-|------------|-----------|
-| **Java 17+** | Lenguaje principal (Tipado fuerte, POO, multiplataforma) |
-| **MySQL 8.0** | Sistema de gestión de base de datos relacional |
-| **JDBC** | Conectividad segura y directa con la base de datos |
-| **Maven** | Gestión de dependencias y construcción del proyecto |
-| **Git** | Control de versiones y trabajo colaborativo |
-
---- 
-
-## 🔒 Seguridad y vulnerabilidades
-El sistema prioriza la seguridad de los datos de los pacientes:
-
-- Inyección SQL: Uso obligatorio de PreparedStatement (JDBC en Java) para todas las consultas.
-- XSS: Sanitización de entradas de usuario antes de mostrarlas en la interfaz.
-- Contraseñas: Hashing seguro utilizando BCrypt o Argon2 (si hubiera usuarios con login).
-- Control de Acceso (RBAC): Validación de roles (Administrador vs. Recepcionista) antes de ejecutar acciones críticas.
-
----
-
-## 🛡️ Manejo de Errores y Logs
-- Try-Catch: Bloques específicos para capturar SQLException, IOException, etc.
-- Logs: Los errores no se muestran al usuario final en producción. Se registran en logs del servidor (logs/app.log) con detalles técnicos.
-- Mensajes al Usuario: Mensajes genéricos y amigables (ej: "Ocurrió un error al procesar la solicitud").
-
----
-
-## 🔄 Flujo de Trabajo (Git)
-Para el control de versiones, se sigue el siguiente flujo:
-
-- Ramas:
-  - main: Código estable y listo para producción.
-  - develop: Rama de integración.
-  - feature/nombre: Para nuevas funcionalidades (ej: feature/gestion-citas).
-  - bugfix/nombre: Para correcciones urgentes.
-- Commit Messages: Semánticos y descriptivos (ej: feat: agregar validación de disponibilidad de consultorio).
-- Pull Requests: Revisión obligatoria por pares antes de fusionar a main.
+| Tecnología           | Uso                                      |
+| -------------------- | ---------------------------------------- |
+| **React JSX**        | Construcción de interfaces               |
+| **Vite**             | Creación y ejecución rápida del proyecto |
+| **JavaScript**       | Lógica del frontend                      |
+| **CSS**              | Estilos personalizados                   |
+| **React Router DOM** | Navegación entre páginas                 |
+| **React Icons**      | Íconos del sistema                       |
+| **Git**              | Control de versiones                     |
+| **GitHub**           | Repositorio remoto                       |
 
 ---
 
 ## 🚀 Instalación y ejecución
-### 📋 Requisitos previos
-- JDK 17 o superior
-- MySQL Server 8.0+
-- Maven 3.6+
-- Git
-### 📦Instalación
-1. Clonar el repositorio:
- ```bash
-git clone https://github.com/daniela_oxeda/MediHana-Sistema.git
-cd MediHana-Sistema
-```
-2. Configurar la base de datos:
-- Crear la base de datos medihana_db.
-- Importar el script inicial schema.sql.
-- Editar el archivo src/main/resources/config.properties con sus credenciales de MySQL.
-3. Compilar el proyecto:
-  ```bash
-  mvn clean compile
-  ```
-### ▶️ Ejecutar el proyecto
+
+### 1️⃣ Clonar el repositorio
+
 ```bash
-mvn exec:java -Dexec.mainClass="com.medihana.Main"
+git clone https://github.com/EdisonNico/frontend_medihana.git
+cd frontend_medihana
 ```
+
+### 2️⃣ Instalar dependencias
+
+```bash
+npm install
+```
+
+### 3️⃣ Ejecutar el proyecto
+
+```bash
+npm run dev
+```
+
+### 4️⃣ Abrir en el navegador
+
+```txt
+http://localhost:5173/
+```
+
 ---
 
-## 👥 Equipo y colaboración
-Proyecto académico desarrollado para la gestión eficiente de la clínica MediHana en el curso Lenguajes de Programación.
+## 🔄 Flujo de trabajo con Git
 
-- Desarrollo: Equipo de estudiantes de Ingeniería de Software y Sistemas.
-- Liderazgo: Coordinación de proyectos tecnológicos.
+```bash
+git checkout -b feature/nombre-funcionalidad
+git add .
+git commit -m "feat: agregar nueva funcionalidad"
+git push origin feature/nombre-funcionalidad
+```
 
---- 
+---
+
+## 🚀 Futuras mejoras
+
+* Conexión con backend.
+* Base de datos real.
+* Login con autenticación.
+* Roles de usuario.
+* Formularios funcionales para crear, editar y eliminar registros.
+* Calendario de citas.
+* Reportes con gráficos.
+* Exportación de reportes en PDF o Excel.
+* Validaciones avanzadas en formularios.
+* Modo oscuro.
+* Diseño responsive mejorado para celulares.
+
+---
+
+## 👥 Equipo
+
+Proyecto académico desarrollado para el curso **Lenguajes de Programación**.
+
+---
 
 ## 📌 Estado del proyecto
-### 🚧 En desarrollo activo
 
-Actualmente se está implementando:
+🚧 En desarrollo activo.
 
-- Estructura base del proyecto Java y conexión a BD.
